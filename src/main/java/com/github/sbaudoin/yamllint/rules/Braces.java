@@ -101,14 +101,8 @@ public class Braces extends TokenRule {
 
     @Override
     public List<LintProblem> check(Map<Object, Object> conf, Token token, Token prev, Token next, Token nextnext, Map<String, Object> context) {
-        if (Boolean.TRUE.equals(conf.get(OPTION_FORBID)) && token instanceof FlowMappingStartToken) {
-            return Collections.singletonList(
-                    new LintProblem(
-                            token.getStartMark().getLine() + 1,
-                            token.getEndMark().getColumn() + 1,
-                            "forbidden flow mapping"
-                    ));
-        } else if ("non-empty".equals(conf.get(OPTION_FORBID)) && token instanceof FlowMappingStartToken && !(next instanceof FlowMappingEndToken)) {
+        if ((Boolean.TRUE.equals(conf.get(OPTION_FORBID)) && token instanceof FlowMappingStartToken) ||
+                ("non-empty".equals(conf.get(OPTION_FORBID)) && token instanceof FlowMappingStartToken && !(next instanceof FlowMappingEndToken))) {
             return Collections.singletonList(
                     new LintProblem(
                             token.getStartMark().getLine() + 1,

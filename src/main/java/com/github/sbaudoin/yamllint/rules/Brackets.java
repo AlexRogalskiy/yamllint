@@ -100,14 +100,8 @@ public class Brackets extends TokenRule {
 
     @Override
     public List<LintProblem> check(Map<Object, Object> conf, Token token, Token prev, Token next, Token nextnext, Map<String, Object> context) {
-        if (Boolean.TRUE.equals(conf.get(OPTION_FORBID)) && token instanceof FlowSequenceStartToken) {
-            return Collections.singletonList(
-                    new LintProblem(
-                            token.getStartMark().getLine() + 1,
-                            token.getEndMark().getColumn() + 1,
-                            "forbidden flow sequence"
-                    ));
-        } else if ("non-empty".equals(conf.get(OPTION_FORBID)) && token instanceof FlowSequenceStartToken && !(next instanceof FlowSequenceEndToken)) {
+        if ((Boolean.TRUE.equals(conf.get(OPTION_FORBID)) && token instanceof FlowSequenceStartToken) ||
+                ("non-empty".equals(conf.get(OPTION_FORBID)) && token instanceof FlowSequenceStartToken && !(next instanceof FlowSequenceEndToken))) {
             return Collections.singletonList(
                     new LintProblem(
                             token.getStartMark().getLine() + 1,
